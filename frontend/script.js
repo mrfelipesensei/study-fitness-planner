@@ -21,7 +21,29 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        //Geração fictícia da rotina
+        routineOutput.innerHTML = ""; //Limpa conteúdo anterior
+        days.forEach((day) => {
+            const card = document.createElement("div");
+            const title = document.createElement("h3");
+            const details = document.createElement("p");
 
-    })
+            title.textContent = capitalize(day);
+            details.textContent = generateRoutine(goal, hours, time);
+
+            card.appendChild(title);
+            card.appendChild(details);
+            routineOutput.appendChild(card);
+        });
+
+        //Exibir rotina
+        routineSection.classList.remove("hidden");
+        routineSection.scrollIntoView({behavior: "smooth"});
+    });
+
+    generateAgainBtn.addEventListener("click", () => {
+        routineSection.classList.add("hidden");
+        form.reset();
+    });
 
 });
