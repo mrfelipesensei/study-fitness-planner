@@ -46,4 +46,26 @@ document.addEventListener("DOMContentLoaded", () => {
         form.reset();
     });
 
+    //Funções auxiliares
+    function capitalize(word) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    }
+
+    function generateRoutine(goal, hours, time) {
+        const activities = {
+            estudo: ["Leitura", "Vídeo aula", "Exercícios práticos", "Revisão"],
+            exercicio: ["Musculação", "Cardio", "Alongamento", "Funcional"],
+            ambos: ["Estudo + Exercício", "Cardio + Leitura", "Revisão + Treino"]
+        };
+
+        let chosen = goal === "ambos"
+            ? random(activities.ambos)
+            : `${random(activities[goal])} por ${hours}h na ${time}`;
+
+        return chosen;
+    }
+
+    function random(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
 });
