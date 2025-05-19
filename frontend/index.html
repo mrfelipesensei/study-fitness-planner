@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Rotina</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Gerador de Rotina Personalizada</h1>
+            <p>Monte uma rotina semanal de estudos e/ou exercícios baseada nas suas preferências.</p>
+        </header>
+
+        <section id="form-section">
+            <form id="preference-form" action="">
+                <label for="name">Seu nome:</label>
+                <input type="text" name="name" id="" required>
+
+                <label for="goal">Objetivo Principal:</label>
+                <select name="" id="goal" required>
+                    <option value="">Selecione</option>
+                    <option value="estudo">Estudo</option>
+                    <option value="exercicio">Exercício</option>
+                    <option value="ambos">Ambos</option>
+                </select>
+
+                <label for="">Dias disponíveis:</label>
+                <div class="days-checkbox">
+                    <label for=""><input type="checkbox" name="days" id="" value="segunda">Segunda</label>
+                    <label for=""><input type="checkbox" name="days" id="" value="terça">Terça</label>
+                    <label for=""><input type="checkbox" name="days" id="" value="quarta">Quarta</label>
+                    <label for=""><input type="checkbox" name="days" id="" value="quinta">Quinta</label>
+                    <label for=""><input type="checkbox" name="days" id="" value="sexta">Sexta</label>
+                    <label for=""><input type="checkbox" name="days" id="" value="sábado">Sábado</label>
+                    <label for=""><input type="checkbox" name="days" id="" value="domingo">Domingo</label>
+                </div>
+
+                <label for="hours">Horas disponíveis por dia:</label>
+                <input type="number" name="" id="hours" min="1" max="24" required>
+
+                <label for="time">Horário preferido:</label>
+                <select name="" id="time" required>
+                    <option value="">Selecione</option>
+                    <option value="manha">Manhã</option>
+                    <option value="tarde">Tarde</option>
+                    <option value="noite">Noite</option>
+                </select>
+
+                <button type="submit">Gerar Rotina</button>
+            </form>
+        </section>
+        
+        <section id="routine-section" class="hidden">
+            <h2>Sua Rotina Semanal</h2>
+            <div id="routine-output" class="routine-grid">
+                <!--Rotina gerada será mostrada-->
+            </div>
+            <button id="generate-again">Gerar Nova Rotina</button>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
