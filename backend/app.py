@@ -57,31 +57,25 @@ def gerar_rotina_personalizada(objetivo, horas, time, dias):
     return rotina
 
 
-
+#Rota da API que responde à requisição do frontend
 @app.route('/gerar-rotina', methods=['POST'])
 def gerar_rotina():
     dados = request.json
+
+    nome = dados.get("name", "Usuário") #Se não enviar name, enviará "Usuário"
     objetivo = dados.get("goal")
-    horas = dados.get("hours")
+    horas = int(dados.get("hours",1))
     time = dados.get("time")
-    dias = dados.get("days")
+    dias = dados.get("days", [])
 
-    atividades = {
-        "estudo" : ["Leitura", "Vídeo aula", "Exercícios práticos", "Revisão"],
-        "exercicio" : ["Musculação", "Cardio", "Alongamento", "Funcional"],
-        "ambos" : ["Estudo + Musculação", "Cardio + Leitura", "Revisão + Treino"]
-    }
+    #Gera a rotina baseada nas preferências
+    rotina = gerar_rotina_personalizada(objetivo, horas, time, dias)
 
-    rotina = {}
-    for dia in dias:
-        if objetivo == "ambos":
-            atividade = random.choice(atividades["ambos"])
-        else:
-            atividade = f"{random.choice(atividades[objetivo])} por {horas}h na {time}"
-        rotina[dia] = atividade
+    return jsonify({
+        "mensagem": f"{nome}, aqui está sua rotina personalizada!",
+        "rotina": rotina
+    })
 
-    return jsonify(rotina)
-
-
+#Inicia o servidor
 if __name__ == '__main__':
     app.run(debug=True)
