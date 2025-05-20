@@ -85,6 +85,18 @@ button:hover {
     background-color: #319795;
 }
 
+.message-box {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: #e0f7fa;
+    border-left: 6px solid #00bcd4;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
 #routine-section {
     margin-top: 2rem;
 }

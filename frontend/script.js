@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const routineSection = document.getElementById("routine-section");
     const routineOutput = document.getElementById("routine-output");
     const generateAgainBtn = document.getElementById("generate-again");
+    const messageBox = document.getElementById("message-box"); //Mostrar a saudação
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -29,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     "Content-Type" : "application/json"
                 },
                 body: JSON.stringify({
+                    name,
                     goal,
                     hours,
                     time,
@@ -40,8 +42,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 throw new Error("Erro ao se comunicar com o servidor.");
             }
 
-            const rotina = await response.json();
+            const resposta = await response.json(); //Novo formato: {mensagem, rotina}
+            const {mensagem, rotina} = resposta;
             console.log("Rotina recebida:", rotina)
+
+            //Mostra a mensagem personalizada no topo
+            messageBox.textContent = mensagem;
+            messageBox.classList.remove("hidden");
+
 
             //Exibe os dados da rotina recebidos dp backend
             routineOutput.innerHTML = ""; //Limpa conteúdo anterior
@@ -51,12 +59,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const title = document.createElement("h3");
                 title.textContent = capitalize(dia);
-
-                const details = document.createElement("p");
-                details.textContent = atividade;
-
                 card.appendChild(title);
-                card.appendChild(details);
+
+                const ul = document.createElement("ul");
+                atividade.forEach(atividade => {
+                    const li = document.createElement("li");
+                    li.textContent = atividade;
+                    ul.appendChild(li);
+                });
+                card.appendChild(ul);
+
                 routineOutput.appendChild(card);
             });
 
@@ -72,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     generateAgainBtn.addEventListener("click", () => {
         routineSection.classList.add("hidden");
         form.reset();
+        messageBox.classList.add("hidden");
     });
 
     //Funções auxiliares
