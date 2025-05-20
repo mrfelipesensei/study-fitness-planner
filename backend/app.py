@@ -39,6 +39,25 @@ def dividir_horas_em_blocos(horas_totais, atividades_disponiveis):
 
     return rotina_dia
 
+#Função principal - gera rotina personalizada
+def gerar_rotina_personalizada(objetivo, horas, time, dias):
+    #Para cada dia, gera uma lista de atividade com tempo dividido
+    rotina = {}
+
+    for dia in dias:
+        #Obtém a lista de atividades com base no objetivo e no turno
+        atividades_turno = atividades_por_objetivo[objetivo][time]
+
+        #Divide o tempo entre as atividades
+        blocos = dividir_horas_em_blocos(horas, atividades_turno)
+
+        #Atribui ao dia correspondente
+        rotina[dia] = blocos
+
+    return rotina
+
+
+
 @app.route('/gerar-rotina', methods=['POST'])
 def gerar_rotina():
     dados = request.json
