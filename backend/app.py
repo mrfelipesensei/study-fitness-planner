@@ -1,9 +1,43 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import random
+import math
 
 app = Flask(__name__)
 CORS(app) # Libera requisções de outros domínios (como o frontend local)
+
+#Atividades organizadas por objetivo e turno do dia
+atividades_por_objetivo = {
+    "estudo": {
+        "manha": ["Leitura", "Vídeo aula", "Exercícios práticos", "Resumos"],
+        "tarde": ["Vídeo aula", "Leitura crítica", "Mapas mentais", "Flashcards"],
+        "noite": ["Revisão", "Leitura leve", "Simulados", "Organização de anotações"]
+    },
+    "exercicio": {
+        "manha": ["Musculação", "Cardio HIT", "Alongamento"],
+        "tarde": ["Funcional", "Cardio leve", "Mobilidade"],
+        "noite": ["Yoga", "Alongamento relaxante", "Caminhada"]
+    },
+    "ambos": {
+        "manha": ["Leitura + Cardio", "Musculação + Resumo", "Mobilidade + Vídeo aula"],
+        "tarde": ["Cardio + Video aula", "Funcional + Leitura crítica","Cardio HIT + Flashcards"],
+        "noite": ["Yoga + Revisão", "Alongamento + Resumo", "Cardio leve + Mapas mentais"]
+    }
+}
+
+#Função para dividir as horas/blocos de atividades
+def dividir_horas_em_blocos(horas_totais, atividades_disponiveis):
+
+    num_blocos = min(len(atividades_disponiveis), horas_totais)
+    horas_por_bloco = horas_totais // num_blocos #arredonda para baixo
+
+    atividades_escolhidas = random.sample(atividades_disponiveis, num_blocos)
+    rotina_dia = []
+
+    for atividade in atividades_disponiveis:
+        rotina_dia.append(f"{horas_por_bloco}h de {atividade}")
+
+    return rotina_dia
 
 @app.route('/gerar-rotina', methods=['POST'])
 def gerar_rotina():
