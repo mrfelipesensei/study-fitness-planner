@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const routineOutput = document.getElementById("routine-output");
     const generateAgainBtn = document.getElementById("generate-again");
 
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         //Coleta de dados
@@ -21,24 +21,52 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        //Geração fictícia da rotina
-        routineOutput.innerHTML = ""; //Limpa conteúdo anterior
-        days.forEach((day) => {
-            const card = document.createElement("div");
-            const title = document.createElement("h3");
-            const details = document.createElement("p");
+        try {
+            //Envia os dados para o backend Flask
+            const response = await fetch("http://localhost:5000/gerar-rotina", {
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify({
+                    goal,
+                    hours,
+                    time,
+                    days
+                })
+            });
 
-            title.textContent = capitalize(day);
-            details.textContent = generateRoutine(goal, hours, time);
+            if (!response.ok) {
+                throw new Error("Erro ao se comunicar com o servidor.");
+            }
 
-            card.appendChild(title);
-            card.appendChild(details);
-            routineOutput.appendChild(card);
-        });
+            const rotina = await response.json();
+            console.log("Rotina recebida:", rotina)
 
-        //Exibir rotina
-        routineSection.classList.remove("hidden");
-        routineSection.scrollIntoView({behavior: "smooth"});
+            //Exibe os dados da rotina recebidos dp backend
+            routineOutput.innerHTML = ""; //Limpa conteúdo anterior
+            Object.entries(rotina).forEach(([dia, atividade]) => {
+                const card = document.createElement("div");
+                card.classList.add("routine-card");
+
+                const title = document.createElement("h3");
+                title.textContent = capitalize(dia);
+
+                const details = document.createElement("p");
+                details.textContent = atividade;
+
+                card.appendChild(title);
+                card.appendChild(details);
+                routineOutput.appendChild(card);
+            });
+
+            routineSection.classList.remove("hidden");
+            routineSection.scrollIntoView({behavior: "smooth"});
+        
+        } catch (error) {
+            console.error(error);
+            alert("Erro ao gerar rotina. Veja o console para mais detalhes.");
+        }
     });
 
     generateAgainBtn.addEventListener("click", () => {
@@ -50,22 +78,5 @@ document.addEventListener("DOMContentLoaded", () => {
     function capitalize(word) {
         return word.charAt(0).toUpperCase() + word.slice(1);
     }
-
-    function generateRoutine(goal, hours, time) {
-        const activities = {
-            estudo: ["Leitura", "Vídeo aula", "Exercícios práticos", "Revisão"],
-            exercicio: ["Musculação", "Cardio", "Alongamento", "Funcional"],
-            ambos: ["Estudo + Exercício", "Cardio + Leitura", "Revisão + Treino"]
-        };
-
-        let chosen = goal === "ambos"
-            ? random(activities.ambos)
-            : `${random(activities[goal])} por ${hours}h na ${time}`;
-
-        return chosen;
-    }
-
-    function random(arr) {
-        return arr[Math.floor(Math.random() * arr.length)];
-    }
+    
 });
