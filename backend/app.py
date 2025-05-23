@@ -106,11 +106,24 @@ def gerar_rotina_personalizada(objetivo, horas, time, dias):
     rotina = {}
 
     for dia in dias:
-        #Obtém a lista de atividades com base no objetivo e no turno
+        #Obtém a lista de atividades combase no objetivo e no turno
         atividades_turno = atividades_por_objetivo[objetivo][time]
 
-        #Divide o tempo entre as atividades
-        blocos = dividir_horas_em_blocos(horas, atividades_turno)
+        #Gera blocos variados para o dia
+        blocos = gerar_blocos_atividades(horas, atividades_turno, dia)
+
+        #Se não for "ambos", há chance de sugerir complementares
+        if objetivo != "ambos":
+            blocos_finais = []
+            for bloco in blocos:
+                partes = bloco.split(" de ", 1)
+                if len(partes) == 2:
+                    duracao, atividade = partes
+                    atividade_final = sugerir_combinacoes(atividade, objetivo)
+                    blocos_finais.append(f"{duracao} de {atividade_final}")
+                else:
+                    blocos_finais.append(bloco)
+            blocos = blocos_finais
 
         #Atribui ao dia correspondente
         rotina[dia] = blocos
