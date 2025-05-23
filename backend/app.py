@@ -1,27 +1,37 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import random
-import math
+
 
 app = Flask(__name__)
 CORS(app) # Libera requisções de outros domínios (como o frontend local)
 
 #Atividades organizadas por objetivo e turno do dia
+#Adicionando mais variedades de atividades
 atividades_por_objetivo = {
     "estudo": {
-        "manha": ["Leitura", "Vídeo aula", "Exercícios práticos", "Resumos"],
-        "tarde": ["Vídeo aula", "Leitura crítica", "Mapas mentais", "Flashcards"],
-        "noite": ["Revisão", "Leitura leve", "Simulados", "Organização de anotações"]
+        "manha": ["Leitura", "Vídeo aula", "Exercícios práticos", "Resumos", "Estudo em grupo",
+                  "Revisão de anotações", "Preparação de materiais", "Pesquisa acadêmica"],
+        "tarde": ["Vídeo aula", "Leitura crítica", "Mapas mentais", "Flashcards" "Prática de problemas",
+                  "Estudos de caso", "Aulas online", "Leitura de artigos"],
+        "noite": ["Revisão", "Leitura leve", "Simulados", "Organização de anotações", "Estudo focado",
+                  "Aúdio livros", "Resumo do dia", "Planejamento do dia seguinte"]
     },
     "exercicio": {
-        "manha": ["Musculação", "Cardio HIT", "Alongamento"],
-        "tarde": ["Funcional", "Cardio leve", "Mobilidade"],
-        "noite": ["Yoga", "Alongamento relaxante", "Caminhada"]
+        "manha": ["Musculação", "Cardio HIT", "Alongamento", "Corrida", "Caminhada", "Elíptico", 
+                  "Pilates", "Treino funcional"],
+        "tarde": ["Funcional", "Cardio leve", "Mobilidade", "Peso livre", "Treino de força",
+                  "Calistenia", "Treino intervalado"],
+        "noite": ["Yoga", "Alongamento relaxante", "Caminhada", "Dança", "Mobilidade",
+                  "Corrida"]
     },
     "ambos": {
-        "manha": ["Leitura + Cardio", "Musculação + Resumo", "Mobilidade + Vídeo aula"],
-        "tarde": ["Cardio + Video aula", "Funcional + Leitura crítica","Cardio HIT + Flashcards"],
-        "noite": ["Yoga + Revisão", "Alongamento + Resumo", "Cardio leve + Mapas mentais"]
+        "manha": ["Leitura + Cardio", "Musculação + Resumo", "Mobilidade + Vídeo aula", 
+                  "Corrida + Flashcards", "Caminhada + Mapas mentais", "Funcional + Revisão"],
+        "tarde": ["Cardio + Video aula", "Funcional + Leitura crítica","Cardio HIT + Flashcards",
+                  "Treino de força + Pesquisa", "Corrida + Leitura", "Calistenia + Estudos de caso"],
+        "noite": ["Yoga + Revisão", "Alongamento + Resumo", "Cardio leve + Mapas mentais",
+                  "Meditação + Leitura", "Dança + Organização", "Pilates + Áudio livros"]
     }
 }
 
