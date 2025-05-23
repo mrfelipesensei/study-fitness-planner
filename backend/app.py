@@ -77,6 +77,28 @@ def gerar_blocos_atividades(horas_totais, atividades_disponiveis, dia_semana):
     return rotina_dia
 
 
+#Função para sugerir combinações de atividades complementares
+def sugerir_combinacoes(atividade_principal, objetivo):
+    combinacoes = {
+        "Leitura": ["Cardio leve", "Alongamento", "Caminhada"],
+        "Vídeo aula": ["Mobilidade", "Calistenia", "HIT"],
+        "Musculação": ["Resumo", "Mapas mentais", "Audiolivros"],
+        "Cardio": ["Flashcards", "Leitura leve", "Revisão"],
+        "Yoga": ["Revisão", "Meditação", "Leitura reflexiva"],
+        "Funcional": ["Leitura crítica", "Exercícios práticos", "Resumos"]
+    }
+
+    #Verifica se a atividade esta entre as principais
+    for chave in combinacoes.keys():
+        if chave.lower() in atividade_principal.lower():
+            #Se o objetivo for "ambos", adiciona uma combinação
+            if objetivo != "ambos" and random.random() < 0.3: #30% de chance
+                complemento = random.choice(combinacoes[chave])
+                return f"{atividade_principal} + {complemento}"
+        
+    return atividade_principal
+
+
 
 #Função principal - gera rotina personalizada
 def gerar_rotina_personalizada(objetivo, horas, time, dias):
