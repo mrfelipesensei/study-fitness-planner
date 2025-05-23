@@ -35,19 +35,48 @@ atividades_por_objetivo = {
     }
 }
 
-#Função para dividir as horas/blocos de atividades
-def dividir_horas_em_blocos(horas_totais, atividades_disponiveis):
+#Variações de durações para tornar a rotina realista
+duracoes_variaveis = [0.5, 1, 1.5, 2, 2.5]
+duracoes_pesos = [10, 45, 20, 20, 5] #Probabilidades relativas para cada duração
 
-    num_blocos = min(len(atividades_disponiveis), horas_totais)
-    horas_por_bloco = horas_totais // num_blocos #arredonda para baixo
-
-    atividades_escolhidas = random.sample(atividades_disponiveis, num_blocos)
+#Função melhorada para gerar blocos de atividades com variação
+def gerar_blocos_atividades(horas_totais, atividades_disponiveis, dia_semana):
     rotina_dia = []
 
-    for atividade in atividades_disponiveis:
-        rotina_dia.append(f"{horas_por_bloco}h de {atividade}")
+    #Número de blocos varia com base no dia para quebrar a monotonia
+    fatores_multiplicadores = {
+        "Segunda" : 1,
+        "Terça": 0.8,
+        "Quarta": 1.2,
+        "Quinta": 0.9,
+        "Sexta": 1.1,
+        "Sábado": 1.3,
+        "Domingo": 0.7
+    }
+
+    #Multiplicador baseado no dia (variação de quantidade de blocos por dia)
+    multiplicador = fatores_multiplicadores.get(dia_semana,1.0)
+    horas_ajustadas = max(1, int(horas_totais * multiplicador))
+
+    #Escolhe aleatoriamente quantos blocos serão criados (entre 1 e o número total de atividades disponíveis)
+    num_blocos = min(len(atividades_disponiveis), random(1, horas_ajustadas))
+
+    #Embaralha as atividades para maior variação e escolhe um subconjunto
+    atividades_escolhidas = random.sample(atividades_disponiveis, num_blocos)
+
+    #Distribui o tempo entre as atividades com variação
+    for atividade in atividades_escolhidas:
+        #Escolhe a duração com base nas probabilidades definidas anteriormente
+        duracao = random.choices(duracoes_variaveis, weights=duracoes_pesos, k=1)[0]
+
+        #Formata a duração
+        duracao_formatada = f"{int(duracao)}h" if duracao.is_integer() else f"{duracao:.1f}h"
+
+        rotina_dia.append(f"{duracao_formatada} de {atividade}")
 
     return rotina_dia
+
+
 
 #Função principal - gera rotina personalizada
 def gerar_rotina_personalizada(objetivo, horas, time, dias):
