@@ -130,6 +130,35 @@ def gerar_rotina_personalizada(objetivo, horas, time, dias):
 
     return rotina
 
+def adicionar_dicas_personalizadas(rotina, objetivo):
+    dicas = {
+        "estudo": [
+            "Tenten alternar entre assuntos diferentes para manter o foco",
+            "Faça pausas de 5 min a cada 25 min de estudo",
+            "Revise seu material antes dormir para melhor assimilação",
+            "Considere a técnica de estudo Feynman"
+        ],
+        "exercicio": [
+            "Lembre-se de se hidratar adequadamente durante os exercícios",
+            "Varie a intensidade/peso para evitar estagnação",
+            "Faça alongamentos",
+            "Use o fim de semana para recuperação ativa"
+        ],
+        "ambos": [
+            "Equilibre atividades mentais e físicas para melhor rendimento",
+            "Não se esqueça de incluir períodos de descanso na rotina",
+            "Tente associar conceitos que você estudou durante atividades físicas leves",
+            "Monitore seu progresso em ambas as áreas semanalmente"
+        ]
+    }
+
+    #Escolhe de 1 a 2 dicas aleatorias 
+    dicas_selecionadas = random.sample(dicas[objetivo], min(2,len(dicas[objetivo])))
+    rotina["dicas"] = dicas_selecionadas
+
+    return rotina
+
+
 
 #Rota da API que responde à requisição do frontend
 @app.route('/gerar-rotina', methods=['POST'])
