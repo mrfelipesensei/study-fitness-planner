@@ -174,9 +174,12 @@ def gerar_rotina():
     #Gera a rotina baseada nas preferências
     rotina = gerar_rotina_personalizada(objetivo, horas, time, dias)
 
+    #Adiciona dicas personalizadas
+    rotina_com_dicas = adicionar_dicas_personalizadas(rotina, objetivo)
+
     return jsonify({
         "mensagem": f"{nome}, aqui está sua rotina personalizada!",
-        "rotina": rotina
+        "rotina": rotina_com_dicas
     })
 
 #Inicia o servidor
