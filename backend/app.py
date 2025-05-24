@@ -4,7 +4,7 @@ import random
 
 
 app = Flask(__name__)
-CORS(app) # Libera requisções de outros domínios (como o frontend local)
+CORS(app, resources={r"/gerar-rotina": {"origins": "http://127.0.0.1:5500"}})
 
 #Atividades organizadas por objetivo e turno do dia
 #Adicionando mais variedades de atividades
@@ -12,7 +12,7 @@ atividades_por_objetivo = {
     "estudo": {
         "manha": ["Leitura", "Vídeo aula", "Exercícios práticos", "Resumos", "Estudo em grupo",
                   "Revisão de anotações", "Preparação de materiais", "Pesquisa acadêmica"],
-        "tarde": ["Vídeo aula", "Leitura crítica", "Mapas mentais", "Flashcards" "Prática de problemas",
+        "tarde": ["Vídeo aula", "Leitura crítica", "Mapas mentais", "Flashcards", "Prática de problemas",
                   "Estudos de caso", "Aulas online", "Leitura de artigos"],
         "noite": ["Revisão", "Leitura leve", "Simulados", "Organização de anotações", "Estudo focado",
                   "Aúdio livros", "Resumo do dia", "Planejamento do dia seguinte"]
@@ -45,13 +45,13 @@ def gerar_blocos_atividades(horas_totais, atividades_disponiveis, dia_semana):
 
     #Número de blocos varia com base no dia para quebrar a monotonia
     fatores_multiplicadores = {
-        "Segunda" : 1,
-        "Terça": 0.8,
-        "Quarta": 1.2,
-        "Quinta": 0.9,
-        "Sexta": 1.1,
-        "Sábado": 1.3,
-        "Domingo": 0.7
+        "segunda" : 1,
+        "terça": 0.8,
+        "quarta": 1.2,
+        "quinta": 0.9,
+        "sexta": 1.1,
+        "sábado": 1.3,
+        "domingo": 0.7
     }
 
     #Multiplicador baseado no dia (variação de quantidade de blocos por dia)
@@ -59,7 +59,7 @@ def gerar_blocos_atividades(horas_totais, atividades_disponiveis, dia_semana):
     horas_ajustadas = max(1, int(horas_totais * multiplicador))
 
     #Escolhe aleatoriamente quantos blocos serão criados (entre 1 e o número total de atividades disponíveis)
-    num_blocos = min(len(atividades_disponiveis), random(1, horas_ajustadas))
+    num_blocos = min(len(atividades_disponiveis), random.randint(1, horas_ajustadas))
 
     #Embaralha as atividades para maior variação e escolhe um subconjunto
     atividades_escolhidas = random.sample(atividades_disponiveis, num_blocos)
